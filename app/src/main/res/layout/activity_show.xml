@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/label_farmer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="Allevatore:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/content_farmer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="Vittone"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/label_number_pigs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Numero maiali:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_farmer" />
+
+        <TextView
+            android:id="@+id/content_number_pigs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="0"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_farmer" />
+
+        <TextView
+            android:id="@+id/label_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Ciclo/Capannone:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_number_pigs" />
+
+        <TextView
+            android:id="@+id/content_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="ciclo"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_number_pigs" />
+
+        <TextView
+            android:id="@+id/label_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Provenienza:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_round" />
+
+        <TextView
+            android:id="@+id/content_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Asti"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_round" />
+
+        <TextView
+            android:id="@+id/label_date_arrival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Data di arrivo:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_source" />
+
+        <TextView
+            android:id="@+id/content_date_arrival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_source" />
+
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintTop_toBottomOf="@id/content_date_arrival" />
+
+
+        <TextView
+            android:id="@+id/label_date_vaccination_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="Vaccinazione 1:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+
+        <TextView
+            android:id="@+id/content_date_vaccination_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+
+        <TextView
+            android:id="@+id/label_date_vaccination_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Vaccinazione 2:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_date_vaccination_first" />
+
+        <TextView
+            android:id="@+id/content_date_vaccination_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_date_vaccination_first" />
+
+        <TextView
+            android:id="@+id/label_date_vaccination_third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Vaccinazione 3:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_date_vaccination_second" />
+
+        <TextView
+            android:id="@+id/content_date_vaccination_third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_date_vaccination_second" />
+
+
+        <TextView
+            android:id="@+id/label_date_vermicide_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="Vermicida 1:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_date_vaccination_third" />
+
+        <TextView
+            android:id="@+id/content_date_vermicide_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_date_vaccination_third" />
+
+        <TextView
+            android:id="@+id/label_date_vermicide_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Vermicida 2:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_date_vermicide_first" />
+
+        <TextView
+            android:id="@+id/content_date_vermicide_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:padding="8dp"
+            android:text="27/09/2019"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/content_farmer"
+            app:layout_constraintTop_toBottomOf="@id/content_date_vermicide_first" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
