@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(tableName = "load")
 @TypeConverters(DateConverter::class)
-data class Load (@PrimaryKey(autoGenerate = true) val lid: Int = 0,
+data class Load (@PrimaryKey(autoGenerate = true) var lid: Long = 0,
                  var farmer: String,
                  var date_arrival: Date,
                  var nr_pigs: Int,
@@ -17,4 +17,7 @@ data class Load (@PrimaryKey(autoGenerate = true) val lid: Int = 0,
                  var date_vaccination_second: Date,
                  var date_vaccination_third: Date,
                  var date_vermicide_first: Date,
-                 var date_vermicide_second: Date)
+                 var date_vermicide_second: Date) {
+
+
+}

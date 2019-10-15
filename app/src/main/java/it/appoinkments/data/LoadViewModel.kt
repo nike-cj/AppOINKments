@@ -7,9 +7,8 @@ import java.util.*
 class LoadViewModel(application : Application)  : ViewModel(){
     val dao = AppDatabase.getAppDatabase(application).loadDao()
 
-    private fun addLoad(load: Load): Load {
-        dao.insertAll(load)
-        return load
+    fun addLoad(load: Load): Long {
+        return dao.insert(load)
     }
 
     fun populateWithTestData() {
@@ -30,9 +29,13 @@ class LoadViewModel(application : Application)  : ViewModel(){
         }
     }
 
+    fun getLoad(id: Long) = dao.findById(id)
+
     fun countLoads() = dao.countLoads()
 
 //    fun updateLoad(name: String, id: Int) = dao.updateName(name, id)
 
     fun getLoadsList() = dao.all
+
+    fun clearAll() = dao.deleteAll()
 }

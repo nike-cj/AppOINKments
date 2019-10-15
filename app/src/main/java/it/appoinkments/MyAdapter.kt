@@ -1,17 +1,20 @@
 package it.appoinkments
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import it.appoinkments.data.AppDatabase
 import it.appoinkments.data.Appointment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyAdapter(private val myDataset: List<Appointment>) :
+class MyAdapter(private val myDataset: List<Appointment>, val context: Context) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -19,15 +22,6 @@ class MyAdapter(private val myDataset: List<Appointment>) :
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(val card: CardView) : RecyclerView.ViewHolder(card) {
-        init {
-            card.setOnClickListener { v ->
-                var intent = Intent(v.context, ShowLoad::class.java)
-                //TODO fill bundle
-                var activity = v.context as AppCompatActivity
-                activity.startActivity(intent)
-                activity.finish()
-            }
-        }
 
         //----- attributes -------------------------------------------------------------------------
         public var farmer : TextView = card.findViewById(R.id.farmer)
@@ -35,11 +29,6 @@ class MyAdapter(private val myDataset: List<Appointment>) :
         public var appointment_type: TextView = card.findViewById(R.id.appointment_type)
         public var nr_pigs: TextView = card.findViewById(R.id.nr_pigs)
         public var round: TextView = card.findViewById(R.id.round)
-
-        //----- constructor ------------------------------------------------------------------------
-//        constructor() : this(card_appointment) {
-//
-//        }
     }
 
 
@@ -49,9 +38,40 @@ class MyAdapter(private val myDataset: List<Appointment>) :
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_appointment, parent, false) as CardView
+
         // set the view's size, margins, paddings and layout parameters
-        ///TODO
+        cardView.setOnClickListener { v ->
+//            var intent = Intent(v.context, ShowLoad::class.java)
+            var item : Appointment = myDataset[ (parent as RecyclerView).getChildLayoutPosition(v) ]
+//            intent.putExtra("load_id", item.load_id)
+//            var activity = v.context as AppCompatActivity
+//            activity.startActivity(intent)
+//            activity.finish()
+
+
+            //Utils.startNewActivity(parent.context, ShowLoad::class.java)
+            val intent = Intent(parent.context, ShowLoad::class.java)
+            intent.putExtra("load_id", item.load_id)
+            parent.context.startActivity(intent)
+        }
+
+        // return view holder
         return MyViewHolder(cardView)
+    }
+
+    object Utils {
+
+        fun startNewActivity(context: Context, clazz: Class<*>) {
+
+            val intent = Intent(context, clazz)
+// To pass any data to next activity
+//            intent.putExtra("keyIdentifier", value)
+// start your next activity
+            context.startActivity(intent)
+
+        }
+
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -78,4 +98,18 @@ class MyAdapter(private val myDataset: List<Appointment>) :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
+
+
+    fun removeCard(index : Int) {
+        // update local object
+        var target: Appointment = myDataset[index]
+        target.completed = true
+
+        // update database
+        var db = AppDatabase.getAppDatabase(context)
+        db.appointmentDao().markCompleted(target.aid)
+
+        // update RecyclerView
+        notifyItemRemoved(index)
+    }
 }

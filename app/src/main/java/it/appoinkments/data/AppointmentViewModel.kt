@@ -2,14 +2,14 @@ package it.appoinkments.data
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AppointmentViewModel(application : Application)  : ViewModel(){
     val dao = AppDatabase.getAppDatabase(application).appointmentDao()
 
-    private fun addAppointment(appointment: Appointment): Appointment {
-        dao.insertAll(appointment)
-        return appointment
+    fun addAppointment(appointment: Appointment): Long {
+        return dao.insert(appointment)
     }
 
     fun populateWithTestData() {
@@ -34,4 +34,11 @@ class AppointmentViewModel(application : Application)  : ViewModel(){
     fun getAppointmentsList() = dao.all
 
     fun getSortedList() = dao.sorted()
+
+    fun getNotCompleted() = dao.not_completed()
+
+    fun getTodayAppointments() : List<Appointment> {
+        var c : Calendar = Calendar.getInstance()
+        return dao.findByDay(SimpleDateFormat("dd/MM/yyyy").format(c.time))
+    }
 }

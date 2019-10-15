@@ -4,7 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import androidx.room.Room
+import it.appoinkments.data.Load
+import it.appoinkments.data.LoadViewModel
+import it.appoinkments.data.ViewModelFactory
+import java.text.SimpleDateFormat
 
 
 class ShowLoad : AppCompatActivity() {
@@ -12,7 +19,9 @@ class ShowLoad : AppCompatActivity() {
     //______________________________________________________________________________________________
     // attributes
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-
+    private val loadViewModel: LoadViewModel by lazy {
+        ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(LoadViewModel::class.java)
+    }
 
     //______________________________________________________________________________________________
     // system callbacks
@@ -23,6 +32,22 @@ class ShowLoad : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "AppOINKments \uD83D\uDC37"
+
+        // retrieve Load
+        val load_id : Long = intent.getLongExtra("load_id", -1)
+        val load : Load = loadViewModel.getLoad(load_id)
+
+        // fill data
+        findViewById<TextView>(R.id.content_farmer).text = load.farmer
+        findViewById<TextView>(R.id.content_number_pigs).text = load.nr_pigs.toString()
+        findViewById<TextView>(R.id.content_round).text = load.round
+        val date_format : SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+        findViewById<TextView>(R.id.content_date_arrival).text = date_format.format(load.date_arrival)
+        findViewById<TextView>(R.id.content_date_vaccination_first).text = date_format.format(load.date_vaccination_first)
+        findViewById<TextView>(R.id.content_date_vaccination_second).text = date_format.format(load.date_vaccination_second)
+        findViewById<TextView>(R.id.content_date_vaccination_third).text = date_format.format(load.date_vaccination_third)
+        findViewById<TextView>(R.id.content_date_vermicide_first).text = date_format.format(load.date_vermicide_first)
+        findViewById<TextView>(R.id.content_date_vermicide_second).text = date_format.format(load.date_vermicide_second)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

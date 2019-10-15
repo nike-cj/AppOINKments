@@ -22,10 +22,10 @@ class AddNew : AppCompatActivity() {
     // attributes
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     private val loadViewModel: LoadViewModel by lazy {
-        ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(LoadViewModel::class.java)
+        ViewModelProviders.of(this, ViewModelFactory(this.application)).get(LoadViewModel::class.java)
     }
     private val appointmentViewModel: AppointmentViewModel by lazy {
-        ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
+        ViewModelProviders.of(this, ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
     }
 
     //______________________________________________________________________________________________
@@ -188,28 +188,30 @@ class AddNew : AppCompatActivity() {
 
     fun storeData() {
         // create Load object
+        var date_format = SimpleDateFormat("dd/MM/yyyy")
         var load: Load = Load (
             farmer = (findViewById<TextInputEditText>(R.id.farmer) as EditText).text.toString(),
-            date_arrival = SimpleDateFormat("dd/MM/yyyy")
+            date_arrival = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_arrival) as EditText).text.toString() ),
             nr_pigs = (findViewById<TextInputEditText>(R.id.number_pig) as EditText).text.toString().toInt(),
             origin = (findViewById<TextInputEditText>(R.id.source) as EditText).text.toString(),
             round = (findViewById<TextInputEditText>(R.id.cycle) as EditText).text.toString(),
 
-            date_vaccination_first = SimpleDateFormat("dd/MM/yyyy")
+            date_vaccination_first = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_vaccination_first) as EditText).text.toString() ),
-            date_vaccination_second = SimpleDateFormat("dd/MM/yyyy")
+            date_vaccination_second = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_vaccination_second) as EditText).text.toString() ),
-            date_vaccination_third = SimpleDateFormat("dd/MM/yyyy")
+            date_vaccination_third = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_vaccination_third) as EditText).text.toString() ),
-            date_vermicide_first = SimpleDateFormat("dd/MM/yyyy")
+            date_vermicide_first = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_vermicide_first) as EditText).text.toString() ),
-            date_vermicide_second = SimpleDateFormat("dd/MM/yyyy")
+            date_vermicide_second = date_format
                 .parse( (findViewById<TextInputEditText>(R.id.date_vermicide_second) as EditText).text.toString() )
         )
 
         // store Load on Firebase
-        loadViewModel.dao.insertAll(load)
+        var load_id = loadViewModel.addLoad(load)
+        load.lid = load_id
 
 
         // create Appointment objects
@@ -260,11 +262,11 @@ class AddNew : AppCompatActivity() {
         )
 
         // store Appointments on Firebase
-        appointmentViewModel.dao.insertAll(vaccination_first)
-        appointmentViewModel.dao.insertAll(vaccination_second)
-        appointmentViewModel.dao.insertAll(vaccination_third)
-        appointmentViewModel.dao.insertAll(vermicide_first)
-        appointmentViewModel.dao.insertAll(vermicide_second)
+        appointmentViewModel.addAppointment(vaccination_first)
+        appointmentViewModel.addAppointment(vaccination_second)
+        appointmentViewModel.addAppointment(vaccination_third)
+        appointmentViewModel.addAppointment(vermicide_first)
+        appointmentViewModel.addAppointment(vermicide_second)
     }
 
 }

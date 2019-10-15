@@ -14,7 +14,10 @@ interface LoadDAO {
 //    @Query("SELECT * FROM Load")
 //    fun loadsAll(): DataSource.Factory<Int, Load>
 
-    @Query("SELECT * FROM load where farmer LIKE :name")
+    @Query("SELECT * FROM load where lid = :load_id ")
+    fun findById(load_id: Long): Load
+
+    @Query("SELECT * FROM load where farmer LIKE :name ")
     fun findByFarmer(name: String): List<Load>
 
 //    @Query("UPDATE load SET name = :name where lid = :id")
@@ -24,8 +27,14 @@ interface LoadDAO {
     fun countLoads(): Int
 
     @Insert
+    fun insert(load: Load) : Long
+
+    @Insert
     fun insertAll(vararg loads: Load)
 
     @Delete
-    fun delete(user: Load)
+    fun delete(load: Load)
+
+    @Query("DELETE FROM load")
+    fun deleteAll()
 }

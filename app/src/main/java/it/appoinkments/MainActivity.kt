@@ -1,5 +1,6 @@
 package it.appoinkments
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -28,7 +29,11 @@ import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
+import android.os.SystemClock
+import androidx.recyclerview.widget.ItemTouchHelper
+import kotlinx.android.synthetic.main.content_main.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,10 +46,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private val appointmentViewModel: AppointmentViewModel by lazy {
-        ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
+        ViewModelProviders.of(this, ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
     }
 
-    val CHANNEL_ID = "channel id"
+    var alarmMgr : AlarmManager? = null
+    lateinit var alarmIntent : PendingIntent
 
 
     //______________________________________________________________________________________________
@@ -56,8 +62,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "AppOINKments \uD83D\uDC37"
 
+        // create notification channel
+        createNotificationChannel()
+
+        // create recycler view
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapter(appointmentViewModel.getSortedList())
+        viewAdapter = MyAdapter(appointmentViewModel.getNotCompleted(), applicationContext)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -72,23 +82,32 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        // enable card swiping
+        val touchHandler = ItemTouchHelper(SwipeHandler(viewAdapter as MyAdapter, 0, (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)))
+        touchHandler.attachToRecyclerView(recyclerView)
+
+        // assign action to + button
         fab.setOnClickListener { view ->
-
-            createNotificationChannel()
-            showNotification()
-            Toast.makeText(
-                applicationContext,
-                "Sent fake notification",
-                Toast.LENGTH_LONG
-            ).show()
-
             val intent = Intent(this, AddNew::class.java)
-            
             startActivity(intent)
             finish()
-
-
         }
+
+        //----- set timer for notification -----
+        alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        var intent : Intent = Intent(applicationContext, AlarmReceiver::class.java)
+        alarmIntent = PendingIntent.getBroadcast(applicationContext, 0, intent, 0);
+
+        var calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(System.currentTimeMillis())
+        calendar.set(Calendar.HOUR_OF_DAY, 14)
+        calendar.set(Calendar.MINUTE, 0)
+        // setRepeating() lets you specify a precise custom interval--in this case, 1 day
+        alarmMgr?.setRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR,
+            AlarmManager.INTERVAL_HALF_HOUR,
+            alarmIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -106,11 +125,12 @@ class MainActivity : AppCompatActivity() {
                 //val intent = Intent(this, MainActivity::class.java)
                 //startActivity(intent)
                 //finish()
-                //TODO create list of farmers
+                //TODO create list of farmer
 
+                showNotification()
                 Toast.makeText(
                     applicationContext,
-                    "Not yet implemented",
+                    "Sent fake notification",
                     Toast.LENGTH_LONG
                 ).show()
 
@@ -127,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(getString(R.string.channel_id), name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system
@@ -145,10 +165,10 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         // builder
-        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        var builder = NotificationCompat.Builder(this, getString(R.string.channel_id))
             .setSmallIcon(R.drawable.ic_pets)
             .setContentTitle("AppOINKment today \uD83D\uDC37")
-            .setContentText("Contenuto prova")
+            .setContentText("Contenuto prova " + SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance().time))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
@@ -162,4 +182,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+}
+
+
+class SwipeHandler(val adapter: MyAdapter, dragDirs : Int, swipeDirs : Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
+        return false
+    }
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        adapter.removeCard(viewHolder.adapterPosition)
+    }
 }
