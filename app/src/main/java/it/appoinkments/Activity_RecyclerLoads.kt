@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import it.appoinkments.data.AppointmentViewModel
+import it.appoinkments.data.Load
 import it.appoinkments.data.LoadViewModel
 import it.appoinkments.data.ViewModelFactory
 
-class Activity_ShowFarmers : AppCompatActivity() {
+class Activity_RecyclerLoads : AppCompatActivity() {
 
     //______________________________________________________________________________________________
     // attributes
@@ -20,11 +20,10 @@ class Activity_ShowFarmers : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
+    private var farmer: String = ""
+
     private val loadViewModel: LoadViewModel by lazy {
         ViewModelProviders.of(this, ViewModelFactory(this.application)).get(LoadViewModel::class.java)
-    }
-    private val appointmentViewModel: AppointmentViewModel by lazy {
-        ViewModelProviders.of(this, ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
     }
 
 
@@ -34,24 +33,20 @@ class Activity_ShowFarmers : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_farmers)
+
+        // retrieve Load list
+        farmer = intent.getStringExtra("farmer")
+        val loads : List<Load> = loadViewModel.getLoadsByFarmer(farmer)
+
+        // set title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "Farmers summary"
-
-        // retrieve data
-        val farmers: List<String> = loadViewModel.getFarmers()
-        var total_loads = mutableListOf<Int>()
-        var total_pigs = mutableListOf<Int>()
-        for (item in farmers) {
-            total_loads.add(loadViewModel.getTotalLoads(item))
-            total_pigs.add(loadViewModel.getTotalPigs(item))
-        }
-        //TODO
+        supportActionBar?.title = farmer
 
         // create recycler view
         viewManager = LinearLayoutManager(this)
 
-        viewAdapter = Adapter_ShowFarmers(farmers, total_loads, total_pigs, applicationContext)
+        viewAdapter = Adapter_RecyclerLoads(loads, farmer, applicationContext)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -77,7 +72,8 @@ class Activity_ShowFarmers : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, Activity_RecyclerFarmers::class.java)
+        intent.putExtra("farmer", farmer)
         startActivity(intent)
         finish()
     }

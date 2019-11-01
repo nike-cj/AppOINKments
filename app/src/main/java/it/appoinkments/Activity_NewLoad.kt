@@ -154,7 +154,7 @@ class Activity_NewLoad : AppCompatActivity() {
             R.id.done -> {
                 storeData()
 
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, Activity_RecyclerAppointments::class.java)
                 startActivity(intent)
                 finish()
 
@@ -167,7 +167,7 @@ class Activity_NewLoad : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, Activity_RecyclerAppointments::class.java)
         startActivity(intent)
         finish()
     }

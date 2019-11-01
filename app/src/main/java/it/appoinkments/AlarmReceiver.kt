@@ -1,18 +1,16 @@
 package it.appoinkments
 
-import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import it.appoinkments.data.AppDatabase
-import it.appoinkments.data.AppointmentViewModel
-import it.appoinkments.data.ViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +36,9 @@ class AlarmReceiver : BroadcastReceiver() {
         app_context = context
         showNotification(context, "I'm in, bitches!!")
 
+        // create notification channel
+        createNotificationChannel()
+
         // retrieve data
         var db = AppDatabase.getAppDatabase(context)
         val now = SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().time)
@@ -61,9 +62,27 @@ class AlarmReceiver : BroadcastReceiver() {
     //______________________________________________________________________________________________
     // internal facilities
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = app_context?.getString(R.string.channel_name)
+            val descriptionText = app_context?.getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(app_context?.getString(R.string.channel_id), name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                app_context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     private fun showNotification(context: Context, text: String) {
         // intent
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent(context, Activity_RecyclerAppointments::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)

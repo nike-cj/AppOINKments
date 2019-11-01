@@ -18,6 +18,9 @@ class Activity_ShowLoad : AppCompatActivity() {
     //______________________________________________________________________________________________
     // attributes
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    private var parent_activity: String = ""
+    private var parent_farmer: String? = ""
+
     private val loadViewModel: LoadViewModel by lazy {
         ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(LoadViewModel::class.java)
     }
@@ -31,6 +34,12 @@ class Activity_ShowLoad : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Load details"
+
+        // retrieve parent information
+        parent_activity = intent.getStringExtra("parent_activity")
+        parent_farmer = intent.getStringExtra("farmer")
+        if (parent_farmer == null)
+            parent_farmer = ""
 
         // retrieve Load
         val load_id : Long = intent.getLongExtra("load_id", -1)
@@ -59,7 +68,7 @@ class Activity_ShowLoad : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify a parent_activity activity in AndroidManifest.xml.
         return when (item.itemId) {
             else -> super.onOptionsItemSelected(item)
         }
@@ -68,7 +77,12 @@ class Activity_ShowLoad : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        val intent = Intent(this, MainActivity::class.java)
+        var intent: Intent = Intent(this, Activity_RecyclerAppointments::class.java)
+        if (parent_activity == "class it.appoinkments.Adapter_RecyclerAppointments")
+            intent = Intent(this, Activity_RecyclerAppointments::class.java)
+        else if (parent_activity == "class it.appoinkments.Adapter_RecyclerLoads")
+            intent = Intent(this, Activity_RecyclerLoads::class.java)
+            intent.putExtra("farmer", parent_farmer)
         startActivity(intent)
         finish()
     }

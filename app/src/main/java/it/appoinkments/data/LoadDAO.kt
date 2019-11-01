@@ -11,8 +11,8 @@ interface LoadDAO {
     @get:Query("SELECT * FROM load")
     val all: List<Load>
 
-//    @Query("SELECT * FROM Load")
-//    fun loadsAll(): DataSource.Factory<Int, Load>
+    @Query("SELECT * FROM load WHERE farmer = :farmer ORDER BY date_arrival")
+    fun getLoadsByFarmer(farmer: String): List<Load>
 
     @Query("SELECT * FROM load where lid = :load_id ")
     fun findById(load_id: Long): Load
@@ -26,7 +26,7 @@ interface LoadDAO {
     @Query("SELECT COUNT(*) from load")
     fun countLoads(): Int
 
-    @Query("SELECT DISTINCT farmer FROM load")
+    @Query("SELECT DISTINCT farmer FROM load ORDER BY farmer")
     fun getFarmers(): List<String>
 
     @Query("SELECT COUNT(*) FROM load WHERE farmer = :farmer")

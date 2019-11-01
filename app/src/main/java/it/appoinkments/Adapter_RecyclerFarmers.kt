@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import it.appoinkments.data.Appointment
 
-class Adapter_ShowFarmers(private val farmers: List<String>, private val total_loads: List<Int>,
-                          private val total_pigs: List<Int>, val context: Context) :
-    RecyclerView.Adapter<Adapter_ShowFarmers.MyViewHolder>() {
+class Adapter_RecyclerFarmers(private val farmers: List<String>, private val total_loads: List<Int>,
+                              private val total_pigs: List<Int>, val context: Context) :
+    RecyclerView.Adapter<Adapter_RecyclerFarmers.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -28,7 +27,7 @@ class Adapter_ShowFarmers(private val farmers: List<String>, private val total_l
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): Adapter_ShowFarmers.MyViewHolder {
+                                    viewType: Int): Adapter_RecyclerFarmers.MyViewHolder {
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_farmer, parent, false) as CardView
@@ -37,29 +36,15 @@ class Adapter_ShowFarmers(private val farmers: List<String>, private val total_l
         cardView.setOnClickListener { v ->
             var item : String = farmers[ (parent as RecyclerView).getChildLayoutPosition(v) ]
 
-            //val intent = Intent(parent.context, Activity_ShowLoad::class.java)
-            //intent.putExtra("farmer", item)
-            //parent.context.startActivity(intent)
+            val intent = Intent(parent.context, Activity_RecyclerLoads::class.java)
+            intent.putExtra("farmer", item)
+            parent.context.startActivity(intent)
         }
 
         // return view holder
         return MyViewHolder(cardView)
     }
 
-    object Utils {
-
-        fun startNewActivity(context: Context, clazz: Class<*>) {
-
-            val intent = Intent(context, clazz)
-// To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-// start your next activity
-            context.startActivity(intent)
-
-        }
-
-
-    }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

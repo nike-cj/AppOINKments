@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class Activity_RecyclerAppointments : AppCompatActivity() {
 
     //______________________________________________________________________________________________
     // attributes
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         // create recycler view
         viewManager = LinearLayoutManager(this)
-        viewAdapter = Adapter_ShowAppointments(appointmentViewModel.getNotCompleted(), applicationContext)
+        viewAdapter = Adapter_RecyclerAppointments(appointmentViewModel.getNotCompleted(), applicationContext)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // enable card swiping
-        val touchHandler = ItemTouchHelper(SwipeHandler(viewAdapter as Adapter_ShowAppointments, 0, (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)))
+        val touchHandler = ItemTouchHelper(SwipeHandler(viewAdapter as Adapter_RecyclerAppointments, 0, (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)))
         touchHandler.attachToRecyclerView(recyclerView)
 
         // assign action to + button
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
         var calendar = Calendar.getInstance()
         calendar.setTimeInMillis(System.currentTimeMillis())
-        calendar.set(Calendar.HOUR_OF_DAY, 14)
+        calendar.set(Calendar.HOUR_OF_DAY, 8)
         calendar.set(Calendar.MINUTE, 0)
         // setRepeating() lets you specify a precise custom interval--in this case, 1 day
         alarmMgr?.setRepeating(
@@ -112,18 +112,9 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.farmers -> {
-                val intent = Intent(this, Activity_ShowFarmers::class.java)
+                val intent = Intent(this, Activity_RecyclerFarmers::class.java)
                 startActivity(intent)
                 finish()
-                //TODO create list of farmer
-
-                showNotification()
-                Toast.makeText(
-                    applicationContext,
-                    "Sent fake notification",
-                    Toast.LENGTH_LONG
-                ).show()
-
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -149,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNotification() {
         // intent
-        val intent = Intent(this, MainActivity::class.java).apply {
+        val intent = Intent(this, Activity_RecyclerAppointments::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
@@ -175,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-class SwipeHandler(val adapterShowAppointments: Adapter_ShowAppointments, dragDirs : Int, swipeDirs : Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+class SwipeHandler(val adapterRecyclerAppointments: Adapter_RecyclerAppointments, dragDirs : Int, swipeDirs : Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -185,6 +176,6 @@ class SwipeHandler(val adapterShowAppointments: Adapter_ShowAppointments, dragDi
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapterShowAppointments.removeCard(viewHolder.adapterPosition)
+        adapterRecyclerAppointments.removeCard(viewHolder.adapterPosition)
     }
 }
