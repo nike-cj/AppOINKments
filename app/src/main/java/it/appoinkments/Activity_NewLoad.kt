@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class AddNew : AppCompatActivity() {
+class Activity_NewLoad : AppCompatActivity() {
 
     //______________________________________________________________________________________________
     // attributes
@@ -33,7 +33,7 @@ class AddNew : AppCompatActivity() {
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new)
+        setContentView(R.layout.activity_new_load)
         //setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -57,6 +57,7 @@ class AddNew : AppCompatActivity() {
         c.add(Calendar.DAY_OF_YEAR, 55)  // three months
         findViewById<TextInputEditText>(R.id.date_vaccination_third)
             .setText(SimpleDateFormat("dd/MM/yyyy").format(c.time))
+        c.add(Calendar.DAY_OF_YEAR, 30)  // four months
         findViewById<TextInputEditText>(R.id.date_vermicide_second)
             .setText(SimpleDateFormat("dd/MM/yyyy").format(c.time))
 
@@ -177,7 +178,7 @@ class AddNew : AppCompatActivity() {
     }
 
     fun showDatePickerDialog(v: View) {
-        val newFragment = DatePickerFragment(v)
+        val newFragment = Fragment_DatePicker(v)
         newFragment.show(supportFragmentManager, "datePicker")
     }
 

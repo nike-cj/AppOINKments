@@ -13,7 +13,7 @@ import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DatePickerFragment(source: View) : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class Fragment_DatePicker(source: View) : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     private var _source : View
     init {
@@ -63,6 +63,7 @@ class DatePickerFragment(source: View) : DialogFragment(), DatePickerDialog.OnDa
             chosen_date.add(Calendar.DAY_OF_YEAR, 55)  // three months
             activity?.findViewById<TextInputEditText>(R.id.date_vaccination_third)
                 ?.setText(SimpleDateFormat("dd/MM/yyyy").format(chosen_date.time))
+            chosen_date.add(Calendar.DAY_OF_YEAR, 30)  // four months
             activity?.findViewById<TextInputEditText>(R.id.date_vermicide_second)
                 ?.setText(SimpleDateFormat("dd/MM/yyyy").format(chosen_date.time))
         }

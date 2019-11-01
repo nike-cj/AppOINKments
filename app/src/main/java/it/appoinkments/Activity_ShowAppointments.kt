@@ -10,28 +10,18 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import it.appoinkments.data.Appointment
 import it.appoinkments.data.AppointmentViewModel
-import it.appoinkments.data.LoadViewModel
 import it.appoinkments.data.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
+import kotlinx.android.synthetic.main.activity_show_appointments.*
 import android.widget.Toast
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.SystemClock
 import androidx.recyclerview.widget.ItemTouchHelper
-import kotlinx.android.synthetic.main.content_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_show_appointments)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "AppOINKments \uD83D\uDC37"
 
@@ -67,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         // create recycler view
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapter(appointmentViewModel.getNotCompleted(), applicationContext)
+        viewAdapter = Adapter_ShowAppointments(appointmentViewModel.getNotCompleted(), applicationContext)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -83,12 +73,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // enable card swiping
-        val touchHandler = ItemTouchHelper(SwipeHandler(viewAdapter as MyAdapter, 0, (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)))
+        val touchHandler = ItemTouchHelper(SwipeHandler(viewAdapter as Adapter_ShowAppointments, 0, (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)))
         touchHandler.attachToRecyclerView(recyclerView)
 
         // assign action to + button
         fab.setOnClickListener { view ->
-            val intent = Intent(this, AddNew::class.java)
+            val intent = Intent(this, Activity_NewLoad::class.java)
             startActivity(intent)
             finish()
         }
@@ -185,7 +175,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-class SwipeHandler(val adapter: MyAdapter, dragDirs : Int, swipeDirs : Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+class SwipeHandler(val adapterShowAppointments: Adapter_ShowAppointments, dragDirs : Int, swipeDirs : Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -195,6 +185,6 @@ class SwipeHandler(val adapter: MyAdapter, dragDirs : Int, swipeDirs : Int) : It
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.removeCard(viewHolder.adapterPosition)
+        adapterShowAppointments.removeCard(viewHolder.adapterPosition)
     }
 }

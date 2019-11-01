@@ -7,14 +7,13 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.room.Room
 import it.appoinkments.data.Load
 import it.appoinkments.data.LoadViewModel
 import it.appoinkments.data.ViewModelFactory
 import java.text.SimpleDateFormat
 
 
-class ShowLoad : AppCompatActivity() {
+class Activity_ShowLoad : AppCompatActivity() {
 
     //______________________________________________________________________________________________
     // attributes
@@ -28,7 +27,7 @@ class ShowLoad : AppCompatActivity() {
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show)
+        setContentView(R.layout.activity_show_load)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "AppOINKments \uD83D\uDC37"
@@ -41,6 +40,7 @@ class ShowLoad : AppCompatActivity() {
         findViewById<TextView>(R.id.content_farmer).text = load.farmer
         findViewById<TextView>(R.id.content_number_pigs).text = load.nr_pigs.toString()
         findViewById<TextView>(R.id.content_round).text = load.round
+        findViewById<TextView>(R.id.content_source).text = load.origin
         val date_format : SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         findViewById<TextView>(R.id.content_date_arrival).text = date_format.format(load.date_arrival)
         findViewById<TextView>(R.id.content_date_vaccination_first).text = date_format.format(load.date_vaccination_first)

@@ -5,17 +5,15 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import it.appoinkments.data.AppDatabase
 import it.appoinkments.data.Appointment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyAdapter(private val myDataset: List<Appointment>, val context: Context) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class Adapter_ShowAppointments(private val myDataset: List<Appointment>, val context: Context) :
+    RecyclerView.Adapter<Adapter_ShowAppointments.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -34,14 +32,14 @@ class MyAdapter(private val myDataset: List<Appointment>, val context: Context) 
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): MyAdapter.MyViewHolder {
+                                    viewType: Int): Adapter_ShowAppointments.MyViewHolder {
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_appointment, parent, false) as CardView
 
         // set the view's size, margins, paddings and layout parameters
         cardView.setOnClickListener { v ->
-//            var intent = Intent(v.context, ShowLoad::class.java)
+//            var intent = Intent(v.context, Activity_ShowLoad::class.java)
             var item : Appointment = myDataset[ (parent as RecyclerView).getChildLayoutPosition(v) ]
 //            intent.putExtra("load_id", item.load_id)
 //            var activity = v.context as AppCompatActivity
@@ -49,8 +47,8 @@ class MyAdapter(private val myDataset: List<Appointment>, val context: Context) 
 //            activity.finish()
 
 
-            //Utils.startNewActivity(parent.context, ShowLoad::class.java)
-            val intent = Intent(parent.context, ShowLoad::class.java)
+            //Utils.startNewActivity(parent.context, Activity_ShowLoad::class.java)
+            val intent = Intent(parent.context, Activity_ShowLoad::class.java)
             intent.putExtra("load_id", item.load_id)
             parent.context.startActivity(intent)
         }

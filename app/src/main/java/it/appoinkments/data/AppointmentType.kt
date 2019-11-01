@@ -16,8 +16,8 @@ enum class AppointmentType {
             vaccination_first -> "I vaccinazione"
             vaccination_second -> "II vaccinazione"
             vaccination_third -> "III vaccinazione"
-            vermicide_first -> "I sverminante"
-            vermicide_second -> "II sverminante"
+            vermicide_first -> "Ivomec"
+            vermicide_second -> "Pigfen"
         }
     }
 }
