@@ -24,7 +24,7 @@ class Adapter_ShowAppointments(private val myDataset: List<Appointment>, val con
         //----- attributes -------------------------------------------------------------------------
         public var farmer : TextView = card.findViewById(R.id.farmer)
         public var date: TextView = card.findViewById(R.id.date)
-        public var appointment_type: TextView = card.findViewById(R.id.appointment_type)
+        public var appointment_type: TextView = card.findViewById(R.id.total_pigs)
         public var nr_pigs: TextView = card.findViewById(R.id.nr_pigs)
         public var round: TextView = card.findViewById(R.id.round)
     }

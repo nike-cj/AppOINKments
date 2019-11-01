@@ -26,6 +26,15 @@ interface LoadDAO {
     @Query("SELECT COUNT(*) from load")
     fun countLoads(): Int
 
+    @Query("SELECT DISTINCT farmer FROM load")
+    fun getFarmers(): List<String>
+
+    @Query("SELECT COUNT(*) FROM load WHERE farmer = :farmer")
+    fun getTotalLoads(farmer: String): Int
+
+    @Query("SELECT SUM(nr_pigs) FROM load WHERE farmer = :farmer")
+    fun getTotalPigs(farmer: String): Int
+
     @Insert
     fun insert(load: Load) : Long
 

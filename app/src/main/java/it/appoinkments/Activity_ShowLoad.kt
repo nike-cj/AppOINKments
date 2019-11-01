@@ -30,7 +30,7 @@ class Activity_ShowLoad : AppCompatActivity() {
         setContentView(R.layout.activity_show_load)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "AppOINKments \uD83D\uDC37"
+        supportActionBar?.title = "Load details"
 
         // retrieve Load
         val load_id : Long = intent.getLongExtra("load_id", -1)

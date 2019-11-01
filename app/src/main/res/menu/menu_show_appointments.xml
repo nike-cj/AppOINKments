@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/farmers"
-        android:title="Edit"
+        android:title="AppOINKments 🐷"
         app:showAsAction="always"
         android:icon="@drawable/ic_farmer"
         />

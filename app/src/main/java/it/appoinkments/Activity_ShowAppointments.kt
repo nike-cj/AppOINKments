@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_show_appointments, menu)
         return true
     }
 
@@ -112,9 +112,9 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.farmers -> {
-                //val intent = Intent(this, MainActivity::class.java)
-                //startActivity(intent)
-                //finish()
+                val intent = Intent(this, Activity_ShowFarmers::class.java)
+                startActivity(intent)
+                finish()
                 //TODO create list of farmer
 
                 showNotification()

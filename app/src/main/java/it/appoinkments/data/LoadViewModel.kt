@@ -33,6 +33,12 @@ class LoadViewModel(application : Application)  : ViewModel(){
 
     fun countLoads() = dao.countLoads()
 
+    fun getFarmers() = dao.getFarmers()
+
+    fun getTotalLoads(farmer: String) = dao.getTotalLoads(farmer)
+
+    fun getTotalPigs(farmer: String) = dao.getTotalPigs(farmer)
+
 //    fun updateLoad(name: String, id: Int) = dao.updateName(name, id)
 
     fun getLoadsList() = dao.all
