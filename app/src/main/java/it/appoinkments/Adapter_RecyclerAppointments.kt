@@ -2,6 +2,7 @@ package it.appoinkments
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,6 +12,7 @@ import it.appoinkments.data.AppDatabase
 import it.appoinkments.data.Appointment
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class Adapter_RecyclerAppointments(private val myDataset: List<Appointment>, val context: Context) :
     RecyclerView.Adapter<Adapter_RecyclerAppointments.MyViewHolder>() {
@@ -62,13 +64,22 @@ class Adapter_RecyclerAppointments(private val myDataset: List<Appointment>, val
         target_date.time = item.date
 
         holder.farmer.text = item.farmer
-        when (target_date.get(Calendar.DATE) - now.get(Calendar.DATE)) {
-            -1 -> holder.date.text = "Ieri"
-            0 -> holder.date.text = "Oggi"
-            1 -> holder.date.text = "Domani"
-            2 -> holder.date.text = "Dopodomani"
-            else -> holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date)
+        if (target_date.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+            && target_date.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
+            when (target_date.get(Calendar.DATE) - now.get(Calendar.DATE)) {
+                -1 -> holder.date.text = "Ieri"
+                0 -> holder.date.text = "Oggi"
+                1 -> holder.date.text = "Domani"
+                2 -> holder.date.text = "Dopodomani"
+                else -> holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date)
+            }
+        } else {
+            holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date)
         }
+        if (target_date > now.apply{ add(Calendar.DATE, -1) })  // at least yesterday
+            holder.date.setTextColor(Color.parseColor("#808080"))   // future appointments (gray)
+        else
+            holder.date.setTextColor(Color.parseColor("#FFA500"))   // past appointments (red)
         holder.appointment_type.text = item.type.toString()
         holder.nr_pigs.text = item.nr_pigs.toString() + " maiali"
         holder.round.text = item.round

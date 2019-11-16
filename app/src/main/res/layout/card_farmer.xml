@@ -33,22 +33,22 @@
 			android:id="@+id/total_loads"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="250dp"
 			android:layout_marginTop="8dp"
 			android:padding="8dp"
 			android:text="Carichi totali: 999"
-			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintStart_toStartOf="@+id/total_pigs"
 			app:layout_constraintTop_toTopOf="parent" />
 		
 		<TextView
 			android:id="@+id/total_pigs"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginEnd="16dp"
 			android:layout_marginBottom="8dp"
 			android:padding="8dp"
 			android:text="Maiali totali: 9999"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintStart_toStartOf="@+id/total_loads"
+			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/total_loads" />
 	
 	</androidx.constraintlayout.widget.ConstraintLayout>

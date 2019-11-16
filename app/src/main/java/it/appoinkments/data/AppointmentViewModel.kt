@@ -38,7 +38,19 @@ class AppointmentViewModel(application : Application)  : ViewModel(){
     fun getNotCompleted() = dao.not_completed()
 
     fun getTodayAppointments() : List<Appointment> {
-        var c : Calendar = Calendar.getInstance()
-        return dao.findByDay(SimpleDateFormat("dd/MM/yyyy").format(c.time))
+        var date_init: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            add(Calendar.DATE, -1)  // the day before
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        var date_end: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        return dao.findByDay(date_init.timeInMillis, date_end.timeInMillis)
     }
 }

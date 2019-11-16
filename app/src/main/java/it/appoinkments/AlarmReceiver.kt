@@ -19,43 +19,59 @@ class AlarmReceiver : BroadcastReceiver() {
     //______________________________________________________________________________________________
     // attributes
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    var app_context : Context? = null
+    private lateinit var app_context : Context
 
 
     //______________________________________________________________________________________________
     // system callbacks
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     override fun onReceive(context: Context?, intent: Intent?) {
-
-        Log.e("notification", "I'm in, bitches!!")
-        if (context == null) {
-            return
-        }
-
         //retrieve context
-        app_context = context
-        showNotification(context, "I'm in, bitches!!")
+        if (context != null) {
+            app_context = context
+        }
 
         // create notification channel
         createNotificationChannel()
 
         // retrieve data
-        var db = AppDatabase.getAppDatabase(context)
-        val now = SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().time)
-        var list = db.appointmentDao().findByDay(now)
-        if (list.isEmpty())
+        var db = AppDatabase.getAppDatabase(app_context)
+        var date_init: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            add(Calendar.DATE, -1)  // the day before
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        var date_end: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        var list = db.appointmentDao().findByDay(date_init.timeInMillis, date_end.timeInMillis)
+        if (list.isEmpty()) {
+            showNotification(app_context, "Buongiorno", "Non ci sono appOINKment per oggi. Prendi uno sdraio e goditi il tuo cocktail.")
             return
+        }
 
         // forge notification message
         var text: String = ""
+        var title: String = ""
         when (list.size) {
             0 -> return
-            1 -> text = list[0].farmer + " ti sta aspettando"
-            else -> text = "Hai più di un appuntamento oggi, quindi smetti di cazzeggiare!"
+            1 -> {
+                text = "L'allevatore " + list[0].farmer + " ti sta aspettando"
+                title = "Hai un appOINKment oggi \uD83D\uDC37"
+            }
+            else -> {
+                text = "Ti stanno aspettando in molti, quindi smetti di cazzeggiare!"
+                title = "Hai più appOINKments oggi \uD83D\uDC37"
+            }
         }
 
         // send notification
-        showNotification(context, text)
+        showNotification(app_context, title, text)
     }
 
 
@@ -80,7 +96,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showNotification(context: Context, text: String) {
+    private fun showNotification(context: Context, title: String, text: String) {
         // intent
         val intent = Intent(context, Activity_RecyclerAppointments::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -90,7 +106,7 @@ class AlarmReceiver : BroadcastReceiver() {
         // builder
         var builder = NotificationCompat.Builder(context, context.getString(R.string.channel_id))
             .setSmallIcon(R.drawable.ic_pets)
-            .setContentTitle("AppOINKment today \uD83D\uDC37")
+            .setContentTitle(title)
             .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification

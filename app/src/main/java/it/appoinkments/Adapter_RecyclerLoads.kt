@@ -62,12 +62,17 @@ class Adapter_RecyclerLoads(private val myDataset: List<Load>, private val farme
         target_date.time = item.date_arrival
 
         holder.farmer.text = item.farmer
-        when (target_date.get(Calendar.DATE) - now.get(Calendar.DATE)) {
-            -1 -> holder.date.text = "Ieri"
-            0 -> holder.date.text = "Oggi"
-            1 -> holder.date.text = "Domani"
-            2 -> holder.date.text = "Dopodomani"
-            else -> holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date_arrival)
+        if (target_date.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+            && target_date.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
+            when (target_date.get(Calendar.DATE) - now.get(Calendar.DATE)) {
+                -1 -> holder.date.text = "Ieri"
+                0 -> holder.date.text = "Oggi"
+                1 -> holder.date.text = "Domani"
+                2 -> holder.date.text = "Dopodomani"
+                else -> holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date_arrival)
+            }
+        } else {
+            holder.date.text = SimpleDateFormat("dd/MM/yyyy").format(item.date_arrival)
         }
         holder.source.text = item.origin
         holder.nr_pigs.text = item.nr_pigs.toString() + " maiali"

@@ -14,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.appoinkments.data.AppointmentViewModel
 import it.appoinkments.data.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_show_appointments.*
-import android.widget.Toast
-import android.os.SystemClock
-import androidx.recyclerview.widget.ItemTouchHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -52,9 +50,6 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "AppOINKments \uD83D\uDC37"
 
-        // create notification channel
-        createNotificationChannel()
-
         // create recycler view
         viewManager = LinearLayoutManager(this)
         viewAdapter = Adapter_RecyclerAppointments(appointmentViewModel.getNotCompleted(), applicationContext)
@@ -84,20 +79,26 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
         }
 
         //----- set timer for notification -----
-        alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        var intent : Intent = Intent(applicationContext, AlarmReceiver::class.java)
-        alarmIntent = PendingIntent.getBroadcast(applicationContext, 0, intent, 0);
+        // create pending intent
+        alarmMgr = (this as Context).getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmIntent = Intent(this as Context, AlarmReceiver::class.java).let { intent ->
+            PendingIntent.getBroadcast(this as Context, 0, intent, 0)
+        }
 
-        var calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis())
-        calendar.set(Calendar.HOUR_OF_DAY, 8)
-        calendar.set(Calendar.MINUTE, 0)
-        // setRepeating() lets you specify a precise custom interval--in this case, 1 day
-        alarmMgr?.setRepeating(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR,
-            AlarmManager.INTERVAL_HALF_HOUR,
-            alarmIntent)
+        // set the alarm to start at approximately 8:00 a.m.
+        var calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 8)
+            set(Calendar.MINUTE, 0)
+        }
+
+        // setup the alarm for triggering once a day
+        alarmMgr?.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            alarmIntent
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -120,49 +121,6 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(getString(R.string.channel_id), name, importance).apply {
-                description = descriptionText
-            }
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    private fun showNotification() {
-        // intent
-        val intent = Intent(this, Activity_RecyclerAppointments::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-        // builder
-        var builder = NotificationCompat.Builder(this, getString(R.string.channel_id))
-            .setSmallIcon(R.drawable.ic_pets)
-            .setContentTitle("AppOINKment today \uD83D\uDC37")
-            .setContentText("Contenuto prova " + SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance().time))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            // Set the intent that will fire when the user taps the notification
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-        // show notification
-        with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(0, builder.build())
-        }
-
-    }
-
 }
 
 

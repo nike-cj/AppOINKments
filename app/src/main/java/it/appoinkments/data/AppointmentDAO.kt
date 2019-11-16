@@ -19,8 +19,8 @@ interface AppointmentDAO {
     @Query("SELECT * FROM appointment where farmer LIKE :name")
     fun findByFarmer(name: String): List<Appointment>
 
-    @Query("SELECT * FROM appointment where date = :date")
-    fun findByDay(date: String): List<Appointment>
+    @Query("SELECT * FROM appointment where date BETWEEN :dayst AND :dayet")
+    fun findByDay(dayst: Long, dayet: Long): List<Appointment>
 
     @Query("SELECT COUNT(*) from appointment")
     fun countAppointments(): Int
