@@ -20,6 +20,12 @@ interface LoadDAO {
     @Query("SELECT * FROM load where farmer LIKE :name ")
     fun findByFarmer(name: String): List<Load>
 
+    @Query("SELECT * FROM load where date_arrival BETWEEN :date_start AND :date_stop ")
+    fun findByDate(date_start: Long, date_stop: Long): List<Load>
+
+    @Query("SELECT * FROM load where farmer LIKE :name AND date_arrival BETWEEN :date_start AND :date_stop")
+    fun findByFarmerAndDate(name: String, date_start: Long, date_stop: Long): List<Load>
+
 //    @Query("UPDATE load SET name = :name where lid = :id")
 //    fun updateName(name: String, id: Int)
 

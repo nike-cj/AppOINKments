@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import android.text.method.TextKeyListener.clear
+import androidx.lifecycle.ViewModel
 
-class Adapter_RecyclerFarmers(private val farmers: List<String>, private val total_loads: List<Int>,
-                              private val total_pigs: List<Int>, val context: Context) :
+
+
+class Adapter_RecyclerFarmers(private var farmers: List<String>, private var total_loads: List<Int>,
+                              private var total_pigs: List<Int>, val context: Context) :
     RecyclerView.Adapter<Adapter_RecyclerFarmers.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -38,6 +42,9 @@ class Adapter_RecyclerFarmers(private val farmers: List<String>, private val tot
 
             val intent = Intent(parent.context, Activity_RecyclerLoads::class.java)
             intent.putExtra("farmer", item)
+            intent.putExtra("old_search", (context as Activity_RecyclerFarmers).name)
+            intent.putExtra("old_start", (context as Activity_RecyclerFarmers).date_start)
+            intent.putExtra("old_stop", (context as Activity_RecyclerFarmers).date_stop)
             parent.context.startActivity(intent)
         }
 
@@ -59,4 +66,13 @@ class Adapter_RecyclerFarmers(private val farmers: List<String>, private val tot
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = farmers.size
+
+    // update data, without re-instantiate the whole recycler
+    fun updateData(farmers: List<String>, total_loads: List<Int>,
+                   total_pigs: List<Int>) {
+        this.farmers = farmers
+        this.total_loads = total_loads
+        this.total_pigs = total_pigs
+        notifyDataSetChanged()
+    }
 }

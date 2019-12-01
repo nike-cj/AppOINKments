@@ -70,8 +70,7 @@ class Fragment_DatePicker(source: View) : DialogFragment(), DatePickerDialog.OnD
         else {
             // assign date value to EditText
             val date = SimpleDateFormat("dd/MM/yyyy").format(chosen_date.time)
-            activity?.findViewById<TextInputEditText>(_source.id)
-                ?.setText(date)
+            (_source as TextInputEditText).setText(date)
         }
     }
 }

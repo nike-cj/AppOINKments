@@ -22,11 +22,23 @@ interface AppointmentDAO {
     @Query("SELECT * FROM appointment where date BETWEEN :dayst AND :dayet")
     fun findByDay(dayst: Long, dayet: Long): List<Appointment>
 
+    @Query("SELECT * FROM appointment where date BETWEEN :dayst AND :dayet AND completed = 0")
+    fun findToDo(dayst: Long, dayet: Long): List<Appointment>
+
     @Query("SELECT COUNT(*) from appointment")
     fun countAppointments(): Int
 
     @Query("UPDATE appointment SET completed = 1 WHERE aid = :appointment_id")
     fun markCompleted(appointment_id: Int)
+
+    @Query("UPDATE appointment SET completed = 1 where load_id = :load_id AND type LIKE :appointment_type")
+    fun markCompleted(load_id: Long, appointment_type: String)
+
+    @Query("UPDATE appointment SET completed = 0 where load_id = :load_id AND type LIKE :appointment_type")
+    fun markNotCompleted(load_id: Long, appointment_type: String)
+
+    @Query("SELECT completed FROM appointment where load_id = :load_id AND type LIKE :appointment_type")
+    fun isCompleted(load_id: Long, appointment_type: String): Boolean
 
 //    @Query("SELECT * FROM appointment WHERE farmer = :farmer and date = :date and type = :appointment_type and nr_pigs = :nr_pigs and round = :round ")
 //    fun getByDetails(farmer: String, date: String, appointment_type: String, nr_pigs: Int, round: String)

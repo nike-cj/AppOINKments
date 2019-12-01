@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Adapter_RecyclerAppointments(private val myDataset: List<Appointment>, val context: Context) :
+class Adapter_RecyclerAppointments(private var myDataset: List<Appointment>, val context: Context) :
     RecyclerView.Adapter<Adapter_RecyclerAppointments.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -88,6 +88,11 @@ class Adapter_RecyclerAppointments(private val myDataset: List<Appointment>, val
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
 
+    // update data, without re-instantiate the whole recycler
+    fun updateData(new_data: List<Appointment>) {
+        myDataset = new_data
+        notifyDataSetChanged()
+    }
 
     fun removeCard(index : Int) {
         // update local object

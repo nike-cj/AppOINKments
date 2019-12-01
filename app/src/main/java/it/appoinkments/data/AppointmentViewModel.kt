@@ -53,4 +53,19 @@ class AppointmentViewModel(application : Application)  : ViewModel(){
         }
         return dao.findByDay(date_init.timeInMillis, date_end.timeInMillis)
     }
+
+    fun isCompleted(load_id: Long, appointment_type: AppointmentType) = dao.isCompleted(load_id, AppointmentTypeConverter.toDatabase(appointment_type))
+
+    fun invertCompletion(load_id: Long, appointment_type: AppointmentType) {
+        var type_str: String = AppointmentTypeConverter.toDatabase(appointment_type)
+        if (dao.isCompleted(load_id, type_str)) {
+            dao.markNotCompleted(load_id, type_str)
+        } else {
+            dao.markCompleted(load_id, type_str)
+        }
+    }
+
+    fun markCompleted(load_id: Long, appointment_type: AppointmentType) = dao.markCompleted(load_id, AppointmentTypeConverter.toDatabase(appointment_type))
+
+    fun markNotCompleted(load_id: Long, appointment_type: AppointmentType) = dao.markNotCompleted(load_id, AppointmentTypeConverter.toDatabase(appointment_type))
 }

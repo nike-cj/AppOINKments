@@ -7,9 +7,7 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import it.appoinkments.data.Load
-import it.appoinkments.data.LoadViewModel
-import it.appoinkments.data.ViewModelFactory
+import it.appoinkments.data.*
 import java.text.SimpleDateFormat
 
 
@@ -23,6 +21,9 @@ class Activity_ShowLoad : AppCompatActivity() {
 
     private val loadViewModel: LoadViewModel by lazy {
         ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(LoadViewModel::class.java)
+    }
+    private val appointmentViewModel: AppointmentViewModel by lazy {
+        ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(AppointmentViewModel::class.java)
     }
 
     //______________________________________________________________________________________________
@@ -57,6 +58,75 @@ class Activity_ShowLoad : AppCompatActivity() {
         findViewById<TextView>(R.id.content_date_vaccination_third).text = date_format.format(load.date_vaccination_third)
         findViewById<TextView>(R.id.content_date_vermicide_first).text = date_format.format(load.date_vermicide_first)
         findViewById<TextView>(R.id.content_date_vermicide_second).text = date_format.format(load.date_vermicide_second)
+        
+        // check and cross marks
+        if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_first))
+            findViewById<TextView>(R.id.done_vaccination_first).text = "✓"
+        else
+            findViewById<TextView>(R.id.done_vaccination_first).text = "✗"
+        if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_second))
+            findViewById<TextView>(R.id.done_vaccination_second).text = "✓"
+        else
+            findViewById<TextView>(R.id.done_vaccination_second).text = "✗"
+        if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_third))
+            findViewById<TextView>(R.id.done_vaccination_third).text = "✓"
+        else
+            findViewById<TextView>(R.id.done_vaccination_third).text = "✗"
+        if (appointmentViewModel.isCompleted(load_id, AppointmentType.vermicide_first))
+            findViewById<TextView>(R.id.done_vermicide_first).text = "✓"
+        else
+            findViewById<TextView>(R.id.done_vermicide_first).text = "✗"
+        if (appointmentViewModel.isCompleted(load_id, AppointmentType.vermicide_second))
+            findViewById<TextView>(R.id.done_vermicide_second).text = "✓"
+        else
+            findViewById<TextView>(R.id.done_vermicide_second).text = "✗"
+
+        // click for changing completion
+        findViewById<TextView>(R.id.done_vaccination_first).setOnClickListener { view ->
+            if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_first)) {
+                appointmentViewModel.markNotCompleted(load_id, AppointmentType.vaccination_first)
+                (view as TextView).text = "✗"
+            } else {
+                appointmentViewModel.markCompleted(load_id, AppointmentType.vaccination_first)
+                (view as TextView).text = "✓"
+            }
+        }
+        findViewById<TextView>(R.id.done_vaccination_second).setOnClickListener { view ->
+            if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_second)) {
+                appointmentViewModel.markNotCompleted(load_id, AppointmentType.vaccination_second)
+                (view as TextView).text = "✗"
+            } else {
+                appointmentViewModel.markCompleted(load_id, AppointmentType.vaccination_second)
+                (view as TextView).text = "✓"
+            }
+        }
+        findViewById<TextView>(R.id.done_vaccination_third).setOnClickListener { view ->
+            if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_third)) {
+                appointmentViewModel.markNotCompleted(load_id, AppointmentType.vaccination_third)
+                (view as TextView).text = "✗"
+            } else {
+                appointmentViewModel.markCompleted(load_id, AppointmentType.vaccination_third)
+                (view as TextView).text = "✓"
+            }
+        }
+        findViewById<TextView>(R.id.done_vermicide_first).setOnClickListener { view ->
+            if (appointmentViewModel.isCompleted(load_id, AppointmentType.vermicide_first)) {
+                appointmentViewModel.markNotCompleted(load_id, AppointmentType.vermicide_first)
+                (view as TextView).text = "✗"
+            } else {
+                appointmentViewModel.markCompleted(load_id, AppointmentType.vermicide_first)
+                (view as TextView).text = "✓"
+            }
+        }
+        findViewById<TextView>(R.id.done_vermicide_second).setOnClickListener { view ->
+            if (appointmentViewModel.isCompleted(load_id, AppointmentType.vermicide_second)) {
+                appointmentViewModel.markNotCompleted(load_id, AppointmentType.vermicide_second)
+                (view as TextView).text = "✗"
+            } else {
+                appointmentViewModel.markCompleted(load_id, AppointmentType.vermicide_second)
+                (view as TextView).text = "✓"
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -76,14 +146,6 @@ class Activity_ShowLoad : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-
-        var intent: Intent = Intent(this, Activity_RecyclerAppointments::class.java)
-        if (parent_activity == "class it.appoinkments.Adapter_RecyclerAppointments")
-            intent = Intent(this, Activity_RecyclerAppointments::class.java)
-        else if (parent_activity == "class it.appoinkments.Adapter_RecyclerLoads")
-            intent = Intent(this, Activity_RecyclerLoads::class.java)
-            intent.putExtra("farmer", parent_farmer)
-        startActivity(intent)
         finish()
     }
 

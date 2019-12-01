@@ -71,10 +71,6 @@ class Activity_RecyclerLoads : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-
-        val intent = Intent(this, Activity_RecyclerFarmers::class.java)
-        intent.putExtra("farmer", farmer)
-        startActivity(intent)
         finish()
     }
 

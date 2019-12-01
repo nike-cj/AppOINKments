@@ -35,6 +35,36 @@ class LoadViewModel(application : Application)  : ViewModel(){
 
     fun getFarmers() = dao.getFarmers()
 
+    fun getSummary(name: String, date_start: Calendar, date_stop: Calendar): List<Load> {
+        date_start.apply {
+            add(Calendar.DATE, -1)  // the day before
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        date_stop.apply {
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        return dao.findByFarmerAndDate("%$name%", date_start.timeInMillis, date_stop.timeInMillis)
+    }
+
+    fun getSummary(date_start: Calendar, date_stop: Calendar): List<Load> {
+        date_start.apply {
+            add(Calendar.DATE, -1)  // the day before
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        date_stop.apply {
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+        }
+        return dao.findByDate(date_start.timeInMillis, date_stop.timeInMillis)
+    }
+
     fun getTotalLoads(farmer: String) = dao.getTotalLoads(farmer)
 
     fun getTotalPigs(farmer: String) = dao.getTotalPigs(farmer)

@@ -11,7 +11,43 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+    
+        <TextView
+            android:id="@+id/done_vermicide_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="✗"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/content_date_vermicide_second"
+            app:layout_constraintTop_toBottomOf="@+id/content_date_vermicide_first" />
+    
+        <TextView
+            android:id="@+id/done_vermicide_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="✓"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/content_date_vermicide_first"
+            app:layout_constraintTop_toBottomOf="@+id/content_date_vaccination_third" />
+    
+        <TextView
+            android:id="@+id/done_vaccination_third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="✗"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/content_date_vaccination_third"
+            app:layout_constraintTop_toBottomOf="@+id/content_date_vaccination_second" />
+    
         <TextView
             android:id="@+id/label_farmer"
             android:layout_width="wrap_content"
@@ -163,7 +199,31 @@
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/content_farmer"
             app:layout_constraintTop_toBottomOf="@id/separator" />
-
+    
+        <TextView
+            android:id="@+id/done_vaccination_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:text="✓"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/content_date_vaccination_first"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+    
+        <TextView
+            android:id="@+id/done_vaccination_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="✗"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/content_date_vaccination_second"
+            app:layout_constraintTop_toBottomOf="@+id/content_date_vaccination_first" />
+    
         <TextView
             android:id="@+id/label_date_vaccination_second"
             android:layout_width="wrap_content"

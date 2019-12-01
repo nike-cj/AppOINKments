@@ -20,12 +20,24 @@ class AlarmReceiver : BroadcastReceiver() {
     // attributes
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     private lateinit var app_context : Context
+    private var last_notification: Calendar? = null
 
 
     //______________________________________________________________________________________________
     // system callbacks
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     override fun onReceive(context: Context?, intent: Intent?) {
+        // check if already notified today
+        var today: Calendar = Calendar.getInstance()
+        if (last_notification != null) {
+            if (last_notification!!.get(Calendar.DATE) == today.get(Calendar.DATE)
+                && last_notification!!.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && last_notification!!.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
+                return  // don't repeat notification
+            }
+        }
+        last_notification = today    // set today for next iteration
+
         //retrieve context
         if (context != null) {
             app_context = context
@@ -49,9 +61,9 @@ class AlarmReceiver : BroadcastReceiver() {
             set(Calendar.MINUTE, 59)
             set(Calendar.SECOND, 59)
         }
-        var list = db.appointmentDao().findByDay(date_init.timeInMillis, date_end.timeInMillis)
+        var list = db.appointmentDao().findToDo(date_init.timeInMillis, date_end.timeInMillis)
         if (list.isEmpty()) {
-            showNotification(app_context, "Buongiorno", "Non ci sono appOINKment per oggi. Prendi uno sdraio e goditi il tuo cocktail.")
+            showNotification(app_context, "Buongiorno \uD83C\uDF79", "Non ci sono appOINKment per oggi. Prendi una sdraio e goditi il tuo cocktail.")
             return
         }
 
@@ -61,12 +73,12 @@ class AlarmReceiver : BroadcastReceiver() {
         when (list.size) {
             0 -> return
             1 -> {
-                text = "L'allevatore " + list[0].farmer + " ti sta aspettando"
                 title = "Hai un appOINKment oggi \uD83D\uDC37"
+                text = "L'allevatore " + list[0].farmer + " ti sta aspettando"
             }
             else -> {
-                text = "Ti stanno aspettando in molti, quindi smetti di cazzeggiare!"
                 title = "Hai più appOINKments oggi \uD83D\uDC37"
+                text = "Ti stanno aspettando in molti, quindi smetti di cazzeggiare!"
             }
         }
 

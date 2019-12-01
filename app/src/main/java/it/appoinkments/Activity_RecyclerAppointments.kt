@@ -22,6 +22,12 @@ import it.appoinkments.data.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_show_appointments.*
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class Activity_RecyclerAppointments : AppCompatActivity() {
@@ -79,26 +85,40 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
         }
 
         //----- set timer for notification -----
-        // create pending intent
-        alarmMgr = (this as Context).getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmIntent = Intent(this as Context, AlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(this as Context, 0, intent, 0)
-        }
-
-        // set the alarm to start at approximately 8:00 a.m.
-        var calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 8)
-            set(Calendar.MINUTE, 0)
-        }
-
-        // setup the alarm for triggering once a day
-        alarmMgr?.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            alarmIntent
+        // check if alarm already set
+        var alarmIntentTemp = Intent(this as Context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this as Context, 0, alarmIntentTemp,
+            PendingIntent.FLAG_NO_CREATE  //just check existence, do not create
         )
+
+        if (pendingIntent == null) {
+            // create pending intent
+            alarmMgr = (this as Context).getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmIntent = Intent(this as Context, AlarmReceiver::class.java).let { intent ->
+                PendingIntent.getBroadcast(this as Context, 0, intent, 0)
+            }
+
+            // set the alarm to start at approximately 8:00 a.m.
+            var calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, 8)
+                set(Calendar.MINUTE, 0)
+            }
+
+            // setup the alarm for triggering once a day
+            alarmMgr?.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                alarmIntent
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        update()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -120,6 +140,10 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun update() {
+        (viewAdapter as Adapter_RecyclerAppointments).updateData(appointmentViewModel.getNotCompleted())
     }
 }
 
