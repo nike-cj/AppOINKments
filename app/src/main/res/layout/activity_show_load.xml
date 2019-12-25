@@ -62,16 +62,18 @@
     
         <TextView
             android:id="@+id/content_farmer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="180dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:text="Vittone"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
+    
         <TextView
             android:id="@+id/label_number_pigs"
             android:layout_width="wrap_content"
@@ -82,19 +84,21 @@
             android:text="Numero maiali:"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_farmer" />
-
+            app:layout_constraintTop_toBottomOf="@+id/content_farmer" />
+    
         <TextView
             android:id="@+id/content_number_pigs"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:text="0"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/content_farmer"
             app:layout_constraintTop_toBottomOf="@id/content_farmer" />
-
+    
         <TextView
             android:id="@+id/label_round"
             android:layout_width="wrap_content"
@@ -105,19 +109,21 @@
             android:text="Ciclo/Capannone:"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_number_pigs" />
-
+            app:layout_constraintTop_toBottomOf="@+id/content_number_pigs" />
+    
         <TextView
             android:id="@+id/content_round"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:text="ciclo"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/content_farmer"
             app:layout_constraintTop_toBottomOf="@id/content_number_pigs" />
-
+    
         <TextView
             android:id="@+id/label_source"
             android:layout_width="wrap_content"
@@ -128,19 +134,21 @@
             android:text="Provenienza:"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_round" />
-
+            app:layout_constraintTop_toBottomOf="@+id/content_round" />
+    
         <TextView
             android:id="@+id/content_source"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:text="Asti"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/content_farmer"
             app:layout_constraintTop_toBottomOf="@id/content_round" />
-
+    
         <TextView
             android:id="@+id/label_date_arrival"
             android:layout_width="wrap_content"
@@ -151,7 +159,7 @@
             android:text="Data di arrivo:"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_source" />
+            app:layout_constraintTop_toBottomOf="@+id/content_source" />
 
         <TextView
             android:id="@+id/content_date_arrival"
