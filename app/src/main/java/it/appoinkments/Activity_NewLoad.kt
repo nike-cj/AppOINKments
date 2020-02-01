@@ -54,11 +54,11 @@ class Activity_NewLoad : AppCompatActivity() {
         c.add(Calendar.DAY_OF_YEAR, 14)  // five weeks
         findViewById<TextInputEditText>(R.id.date_vaccination_second)
             .setText(SimpleDateFormat("dd/MM/yyyy").format(c.time))
-        c.add(Calendar.DAY_OF_YEAR, 55)  // three months
-        findViewById<TextInputEditText>(R.id.date_vaccination_third)
+        c.add(Calendar.DAY_OF_YEAR, 25)  // forty days
+        findViewById<TextInputEditText>(R.id.date_vermicide_second) 
             .setText(SimpleDateFormat("dd/MM/yyyy").format(c.time))
-        c.add(Calendar.DAY_OF_YEAR, 30)  // four months
-        findViewById<TextInputEditText>(R.id.date_vermicide_second)
+        c.add(Calendar.DAY_OF_YEAR, 40)  // three months
+        findViewById<TextInputEditText>(R.id.date_vaccination_third)
             .setText(SimpleDateFormat("dd/MM/yyyy").format(c.time))
 
         // create DatePicker at click
