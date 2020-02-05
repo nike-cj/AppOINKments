@@ -37,6 +37,10 @@ class AppointmentViewModel(application : Application)  : ViewModel(){
 
     fun getNotCompleted() = dao.not_completed()
 
+    fun getByLoad(load_id: Long) = dao.getByLoad(load_id)
+
+    fun getByLoad(load_id: Long, type: String) = dao.getByLoad(load_id, type)
+
     fun getTodayAppointments() : List<Appointment> {
         var date_init: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
@@ -68,4 +72,11 @@ class AppointmentViewModel(application : Application)  : ViewModel(){
     fun markCompleted(load_id: Long, appointment_type: AppointmentType) = dao.markCompleted(load_id, AppointmentTypeConverter.toDatabase(appointment_type))
 
     fun markNotCompleted(load_id: Long, appointment_type: AppointmentType) = dao.markNotCompleted(load_id, AppointmentTypeConverter.toDatabase(appointment_type))
+
+    fun update(appointment: Appointment) = dao.update(appointment)
+
+    fun delete(load_id: Long) {
+        for (appointment in getByLoad(load_id))
+            dao.delete(appointment)
+    }
 }

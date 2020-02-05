@@ -62,28 +62,35 @@ class AlarmReceiver : BroadcastReceiver() {
             set(Calendar.SECOND, 59)
         }
         var list = db.appointmentDao().findToDo(date_init.timeInMillis, date_end.timeInMillis)
-        if (list.isEmpty()) {
-            showNotification(app_context, "Buongiorno \uD83C\uDF79", "Non ci sono appOINKment per oggi. Prendi una sdraio e goditi il tuo cocktail.")
-            return
-        }
+//        if (list.isEmpty()) {
+//            showNotification(app_context, "Buongiorno \uD83C\uDF79", "Non ci sono appOINKment per oggi. Prendi una sdraio e goditi il tuo cocktail.")
+//            return
+//        }
 
         // forge notification message
         var text: String = ""
         var title: String = ""
+        var description: String = ""
         when (list.size) {
-            0 -> return
+            0 -> {
+                title = "Buongiorno \uD83C\uDF79"
+                text = "Non hai alcun appuntamento"
+                description = "Non ci sono appOINKment per oggi. Prendi una sdraio e goditi il tuo cocktail."
+            }
             1 -> {
                 title = "Hai un appOINKment oggi \uD83D\uDC37"
-                text = "L'allevatore " + list[0].farmer + " ti sta aspettando"
+                text = "Hai un appuntamento"
+                description = "L'allevatore " + list[0].farmer + " ti sta aspettando"
             }
             else -> {
                 title = "Hai più appOINKments oggi \uD83D\uDC37"
-                text = "Ti stanno aspettando in molti, quindi smetti di cazzeggiare!"
+                text = "Hai " + list.size.toString() + " appuntamenti"
+                description = "Ti stanno aspettando in molti, quindi smetti di cazzeggiare!"
             }
         }
 
         // send notification
-        showNotification(app_context, title, text)
+        showNotification(app_context, title, text, description)
     }
 
 
@@ -108,7 +115,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showNotification(context: Context, title: String, text: String) {
+    private fun showNotification(context: Context, title: String, text: String, description: String) {
         // intent
         val intent = Intent(context, Activity_RecyclerAppointments::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -120,6 +127,8 @@ class AlarmReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_pets)
             .setContentTitle(title)
             .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(description))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)

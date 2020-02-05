@@ -9,6 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import it.appoinkments.data.*
 import java.text.SimpleDateFormat
+import android.widget.Toast
+import android.content.DialogInterface
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.appcompat.app.AlertDialog
 
 
 class Activity_ShowLoad : AppCompatActivity() {
@@ -18,6 +25,8 @@ class Activity_ShowLoad : AppCompatActivity() {
     //‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     private var parent_activity: String = ""
     private var parent_farmer: String? = ""
+
+    private var load_id: Long = -1
 
     private val loadViewModel: LoadViewModel by lazy {
         ViewModelProviders.of(this,   ViewModelFactory(this.application)).get(LoadViewModel::class.java)
@@ -37,13 +46,20 @@ class Activity_ShowLoad : AppCompatActivity() {
         supportActionBar?.title = "Load details"
 
         // retrieve parent information
-        parent_activity = intent.getStringExtra("parent_activity")
-        parent_farmer = intent.getStringExtra("farmer")
-        if (parent_farmer == null)
-            parent_farmer = ""
+//        parent_activity = intent.getStringExtra("parent_activity")
+//        parent_farmer = intent.getStringExtra("farmer")
+//        if (parent_farmer == null)
+//            parent_farmer = ""
+
+        // retrieve target Load
+        load_id = intent.getLongExtra("load_id", -1)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         // retrieve Load
-        val load_id : Long = intent.getLongExtra("load_id", -1)
         val load : Load = loadViewModel.getLoad(load_id)
 
         // fill data
@@ -58,7 +74,7 @@ class Activity_ShowLoad : AppCompatActivity() {
         findViewById<TextView>(R.id.content_date_vaccination_third).text = date_format.format(load.date_vaccination_third)
         findViewById<TextView>(R.id.content_date_vermicide_first).text = date_format.format(load.date_vermicide_first)
         findViewById<TextView>(R.id.content_date_vermicide_second).text = date_format.format(load.date_vermicide_second)
-        
+
         // check and cross marks
         if (appointmentViewModel.isCompleted(load_id, AppointmentType.vaccination_first))
             findViewById<TextView>(R.id.done_vaccination_first).text = "✓"
@@ -138,8 +154,28 @@ class Activity_ShowLoad : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent_activity activity in AndroidManifest.xml.
+        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
+            R.id.edit -> {
+                val intent = Intent(this, Activity_NewLoad::class.java)
+                intent.putExtra("load_id", load_id)
+                startActivity(intent)
+                return true
+            }
+            R.id.delete -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Attenzione")
+                    .setMessage("Vuoi eliminare questo carico di maiali e tutte le medicazioni associate?")
+                    .setIcon(R.drawable.ic_warning)
+                    .setPositiveButton("Conferma",
+                        DialogInterface.OnClickListener { dialog, whichButton ->
+                            loadViewModel.delete(load_id)
+                            appointmentViewModel.delete(load_id)
+                            finish()
+                        })
+                    .setNegativeButton("Annulla", null).show()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -75,5 +75,11 @@ class LoadViewModel(application : Application)  : ViewModel(){
 
     fun getLoadsByFarmer(farmer: String) = dao.getLoadsByFarmer(farmer)
 
+    fun update(load: Load) = dao.update(load)
+
+    fun delete(load_id: Long) {
+        dao.delete(getLoad(load_id))
+    }
+
     fun clearAll() = dao.deleteAll()
 }

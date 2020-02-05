@@ -81,7 +81,7 @@ class Activity_RecyclerAppointments : AppCompatActivity() {
         fab.setOnClickListener { view ->
             val intent = Intent(this, Activity_NewLoad::class.java)
             startActivity(intent)
-            finish()
+            //finish()
         }
 
         //----- set timer for notification -----

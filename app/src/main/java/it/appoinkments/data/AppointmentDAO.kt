@@ -1,9 +1,6 @@
 package it.appoinkments.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface AppointmentDAO {
@@ -15,6 +12,12 @@ interface AppointmentDAO {
 
     @Query("SELECT * FROM appointment WHERE completed = 0 ORDER BY date, type")
     fun not_completed(): List<Appointment>
+
+    @Query("SELECT * FROM appointment WHERE load_id = :load_id")
+    fun getByLoad(load_id: Long): List<Appointment>
+
+    @Query("SELECT * FROM appointment WHERE load_id = :load_id AND type = :appointment_type")
+    fun getByLoad(load_id: Long, appointment_type: String): Appointment
 
     @Query("SELECT * FROM appointment where farmer LIKE :name")
     fun findByFarmer(name: String): List<Appointment>
@@ -50,5 +53,8 @@ interface AppointmentDAO {
     fun insertAll(vararg appointments: Appointment)
 
     @Delete
-    fun delete(user: Appointment)
+    fun delete(appointment: Appointment)
+
+    @Update
+    fun update(appointment: Appointment)
 }

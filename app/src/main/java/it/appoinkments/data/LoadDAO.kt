@@ -1,9 +1,6 @@
 package it.appoinkments.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import javax.sql.DataSource
 
 @Dao
@@ -52,4 +49,7 @@ interface LoadDAO {
 
     @Query("DELETE FROM load")
     fun deleteAll()
+
+    @Update
+    fun update(load: Load)
 }

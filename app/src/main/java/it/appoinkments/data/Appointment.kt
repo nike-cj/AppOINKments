@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(tableName = "appointment")
 @TypeConverters(DateConverter::class, AppointmentTypeConverter::class)
-data class Appointment (@PrimaryKey(autoGenerate = true) val aid: Int = 0,
+data class Appointment (@PrimaryKey(autoGenerate = true) var aid: Int = 0,
                         var load_id: Long,
                         var date: Date,
                         var type: AppointmentType,
